@@ -1,0 +1,24 @@
+services:
+  mongodb:
+    image: mongo:6.0  
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: nobys
+      MONGO_INITDB_ROOT_PASSWORD: nobys
+    volumes:
+      - mongodb_data:/data/db
+
+  mongo-express:
+    image: mongo-express:1.0
+    container_name: mongo_express
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: nobys
+      ME_CONFIG_MONGODB_ADMINPASSWORD: nobys
+      ME_CONFIG_MONGODB_SERVER: nobys
+
+volumes:
+  mongodb_data:
