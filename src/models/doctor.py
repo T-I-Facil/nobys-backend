@@ -8,6 +8,7 @@ class Doctor(BaseModel):
     email: Optional[str]
     crm: str
     is_admin: bool
+    is_confirmed: bool
     others: bool
 
     @field_validator("password")

@@ -15,3 +15,12 @@ class UserRepository:
         if user:
             user["_id"] = str(user["_id"])
         return user
+
+    def get_by_email(self, email: str):
+        user = self.db.users.find_one({"email": email})
+        if user:
+            user["_id"] = str(user["_id"])
+        return user
+    
+    def update(self, filter: dict, update: dict):
+        return self.db.users.update_one(filter, update)
