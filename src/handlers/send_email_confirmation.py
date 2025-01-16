@@ -1,9 +1,10 @@
 from itsdangerous import URLSafeTimedSerializer
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
+from config.vars import Config
 
 conf = ConnectionConfig(
     MAIL_USERNAME="shadyrajaab@gmail.com",
-    MAIL_PASSWORD="nijf ztrx svzg ftyt",
+    MAIL_PASSWORD=Config.MAIL_PASSWORD,
     MAIL_FROM="shadyrajaab@gmail.com",
     MAIL_PORT=587,
     MAIL_SERVER="smtp.gmail.com",
