@@ -1,15 +1,15 @@
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, EmailStr
 from typing import Optional
 import bcrypt
 
 class Doctor(BaseModel):
     username: str
     password: str
-    email: Optional[str]
-    crm: str
-    is_admin: bool
-    is_confirmed: bool
-    others: bool
+    email: EmailStr
+    crm: Optional[str] = None
+    is_admin: Optional[bool] = False
+    is_confirmed: Optional[bool] = False
+    others: Optional[bool] = False
 
     @field_validator("password")
     def hash_password(cls, value: str) -> str:
