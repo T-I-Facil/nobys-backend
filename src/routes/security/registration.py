@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 from itsdangerous import URLSafeTimedSerializer
-from models.doctor import Doctor
+from models.user import User
 from mongo import UserRepository
 from handlers import send_confirmation_email
 
@@ -9,7 +9,7 @@ router = APIRouter(prefix="/v1")
 serializer = URLSafeTimedSerializer("secret-key")
 
 @router.post("/register")
-async def register(user: Doctor):
+async def register(user: User):
     user_repository = UserRepository()
     user_repository.create(user)
     await send_confirmation_email(user.email, user.username)

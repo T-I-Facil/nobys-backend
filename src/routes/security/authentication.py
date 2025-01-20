@@ -31,6 +31,7 @@ async def login(credentials: LoginRequest):
                 "username": user["username"],
                 "email": user.get("email", ""),
                 "is_admin": user.get("is_admin", False),
+                "user_id": str(user["_id"]),
             },
         },
     )

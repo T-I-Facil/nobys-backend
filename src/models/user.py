@@ -2,7 +2,7 @@ from pydantic import BaseModel, field_validator, EmailStr
 from typing import Optional
 import bcrypt
 
-class Doctor(BaseModel):
+class User(BaseModel):
     username: str
     password: str
     email: EmailStr

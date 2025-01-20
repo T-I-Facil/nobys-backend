@@ -1,3 +1,5 @@
-from .doctor import Doctor
+from .user import User
+from .hospital import Hospital
+from .schedule import Schedule
 
-__all__ = [Doctor]
+__all__ = [User, Hospital, Schedule]
