@@ -12,7 +12,7 @@ serializer = URLSafeTimedSerializer("secret-key")
 async def register(user: User):
     user_repository = UserRepository()
     user_repository.create(user)
-    await send_confirmation_email(user.email, user.username)
+    await send_confirmation_email(user.email, user.name)
     return JSONResponse(status_code=200, content={"message": "User registered successfully. Please check your email for confirmation."})
 
 
