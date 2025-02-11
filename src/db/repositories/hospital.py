@@ -1,5 +1,5 @@
-from mongo.client import get_db
-from models.hospital import Hospital
+from db.client import get_db
+from ..schemas.hospital import Hospital
 
 class HospitalRepository:
     def __init__(self):

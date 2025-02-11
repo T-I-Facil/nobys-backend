@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from mongo import HospitalRepository
-from models.hospital import Hospital
+from db.repositories import HospitalRepository
+from ..models.hospital import Hospital
 from fastapi.encoders import jsonable_encoder
 
 router = APIRouter(prefix="/v1")
