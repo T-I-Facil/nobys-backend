@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
-from db.repositories import UserRepository
-from ..models.login import LoginRequest
+from repositories import UserRepository
+from models import LoginRequest
 from services.auth_service import AuthService
 
 router = APIRouter(prefix="/v1")

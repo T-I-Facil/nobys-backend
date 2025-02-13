@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 import uvicorn
 import os
-from api import routes
+from routes import routes
 from fastapi.middleware.cors import CORSMiddleware
 import logging
 

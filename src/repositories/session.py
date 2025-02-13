@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 import secrets
-from db.client import get_db
+from client import get_db
 
 class SessionRepository:
     def __init__(self):

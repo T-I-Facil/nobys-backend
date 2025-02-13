@@ -1,6 +1,6 @@
-from db.client import get_db
-from ..schemas import User
+from client import get_db
 from bson import ObjectId
+from schemas import User
 
 class UserRepository:    
     def __init__(self):

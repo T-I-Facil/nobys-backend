@@ -1,0 +1,24 @@
+from repositories import InvoiceRepository, ScheduleRepository
+from models import CreateInvoiceRequest, ScheduleIds
+from datetime import datetime
+
+class InvoiceService:
+    def __init__(self):
+        self.invoice_repository = InvoiceRepository()
+        self.schedule_repository = ScheduleRepository()
+
+    def add_invoice(self, user_id: str, schedule_ids: ScheduleIds):
+        total = 0
+        for schedule_id in schedule_ids.schedule_ids:
+            schedule = self.schedule_repository.get_schedule_by_id(schedule_id)
+            total += schedule.value * schedule.schedule_time
+            self.schedule_repository.update_schedule(schedule_id, {"invoiced": True})
+
+        invoice = CreateInvoiceRequest(
+            user_id=user_id,
+            total=total,
+            created_at=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            schedule_ids=schedule_ids.schedule_ids
+        )
+        
+        return self.invoice_repository.create(invoice.model_dump())

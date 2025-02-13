@@ -2,7 +2,7 @@ from typing import Optional
 import bcrypt
 from fastapi import HTTPException, Depends
 from jose import jwt, JWTError
-from db.repositories import UserRepository
+from repositories import UserRepository
 from datetime import datetime, timedelta
 from core.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, OAUTH2_SCHEME
 

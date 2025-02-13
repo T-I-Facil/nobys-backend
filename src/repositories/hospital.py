@@ -1,5 +1,5 @@
-from db.client import get_db
-from ..schemas.hospital import Hospital
+from client import get_db
+from schemas import Hospital
 
 class HospitalRepository:
     def __init__(self):

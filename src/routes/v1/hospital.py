@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from db.repositories import HospitalRepository
-from ..models.hospital import Hospital
+from repositories import HospitalRepository
+from models import CreateHospital
 from fastapi.encoders import jsonable_encoder
 
 router = APIRouter(prefix="/v1")
@@ -13,7 +13,7 @@ async def get_hospitals():
     return JSONResponse(status_code=200, content={"hospitals": hospitals})
 
 @router.post("/hospitals")
-async def create_hospital(hospital: Hospital):    
+async def create_hospital(hospital: CreateHospital):    
     hospital_repo = HospitalRepository()
     hospital_repo.create(hospital)
     return JSONResponse(status_code=200, content={"message": "Hospital created successfully"})

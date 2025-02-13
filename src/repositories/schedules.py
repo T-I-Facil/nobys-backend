@@ -1,10 +1,9 @@
-from db.client import get_db
-from ..schemas import Schedule
+from client import get_db
 from bson import ObjectId
 from datetime import datetime, timedelta
 from typing import Optional, List
 from pymongo.errors import PyMongoError
-
+from schemas import Schedule
 
 class ScheduleRepository:
     def __init__(self):
@@ -25,18 +24,18 @@ class ScheduleRepository:
         Obtém os agendamentos de um usuário com a opção de filtrar por data.
 
         :param user_id: ID do usuário.
-        :param date: Data no formato YYYY-MM-DD para filtrar os agendamentos.
+        :param date: Data no formato ISO 8601 para filtrar os agendamentos.
         :return: Lista de agendamentos do usuário.
         """
         try:
             query = {"user_id": user_id}
             if date:
                 try:
-                    start_of_day = datetime.strptime(date, "%Y-%m-%d")
+                    start_of_day = datetime.fromisoformat(date).replace(hour=0, minute=0, second=0, microsecond=0)
                     end_of_day = start_of_day + timedelta(days=1)
                     query["start_date"] = {"$gte": start_of_day, "$lt": end_of_day}
                 except ValueError as e:
-                    raise ValueError(f"Data inválida: {date}. Use o formato YYYY-MM-DD.") from e
+                    raise ValueError(f"Data inválida: {date}. Use o formato ISO 8601.") from e
 
             schedules_cursor = self.db.schedules.find(query)
             schedules = [
@@ -84,3 +83,35 @@ class ScheduleRepository:
                 raise ValueError(f"Agendamento com ID {schedule_id} não encontrado.")
         except PyMongoError as e:
             raise RuntimeError("Erro ao remover agendamento do banco de dados.") from e
+
+    def update_schedule(self, schedule_id: str, schedule: Schedule) -> None:
+        """
+        Atualiza um agendamento no banco de dados.
+
+        :param schedule_id: ID do agendamento a ser atualizado.
+        :param schedule: Instância do modelo Schedule com os dados atualizados.
+        """
+        try:
+            schedule_object_id = self._validate_object_id(schedule_id)
+            self.db.schedules.update_one({"_id": schedule_object_id}, {"$set": schedule})
+        except PyMongoError as e:
+            raise RuntimeError("Erro ao atualizar agendamento no banco de dados.") from e
+        
+    def get_schedule_by_id(self, schedule_id: str) -> Schedule:
+        try:
+            schedule_object_id = self._validate_object_id(schedule_id)
+            schedule = self.db.schedules.find_one({"_id": schedule_object_id})
+            if not schedule:
+                raise ValueError(f"Agendamento com ID {schedule_id} não encontrado.")
+            return Schedule(
+                id=str(schedule["_id"]),
+                user_id=str(schedule["user_id"]),
+                start_date=schedule["start_date"],
+                schedule_time=schedule["schedule_time"],
+                value=schedule["value"],
+                invoiced=schedule.get("invoiced", False),
+                specialty=schedule.get("specialty"),
+                description=schedule.get("description"),
+            )
+        except PyMongoError as e:
+            raise RuntimeError("Erro ao buscar agendamento no banco de dados.") from e
