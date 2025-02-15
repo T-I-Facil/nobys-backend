@@ -19,7 +19,7 @@ class ScheduleRepository:
             raise ValueError(f"ID inválido: {id_value}")
         return ObjectId(id_value)
 
-    def get_schedules(self, user_id: str, date: Optional[str] = None) -> List[Schedule]:
+    def get_schedules(self, user_id: str, start_date: Optional[str] = None, end_date: Optional[str] = None) -> List[Schedule]:
         """
         Obtém os agendamentos de um usuário com a opção de filtrar por data.
 
@@ -29,13 +29,13 @@ class ScheduleRepository:
         """
         try:
             query = {"user_id": user_id}
-            if date:
+            if start_date and end_date:
                 try:
-                    start_of_day = datetime.fromisoformat(date).replace(hour=0, minute=0, second=0, microsecond=0)
-                    end_of_day = start_of_day + timedelta(days=1)
+                    start_of_day = datetime.fromisoformat(start_date).replace(hour=0, minute=0, second=0, microsecond=0)
+                    end_of_day = datetime.fromisoformat(end_date).replace(hour=23, minute=59, second=59, microsecond=999999)
                     query["start_date"] = {"$gte": start_of_day, "$lt": end_of_day}
                 except ValueError as e:
-                    raise ValueError(f"Data inválida: {date}. Use o formato ISO 8601.") from e
+                    raise ValueError(f"Data inválida: {start_date}. Use o formato ISO 8601.") from e
 
             schedules_cursor = self.db.schedules.find(query)
             schedules = [
@@ -48,6 +48,7 @@ class ScheduleRepository:
                     invoiced=schedule.get("invoiced", False),
                     specialty=schedule.get("specialty"),
                     description=schedule.get("description"),
+                    month=schedule["start_date"].strftime("%B")
                 )
                 for schedule in schedules_cursor
             ]
@@ -103,6 +104,7 @@ class ScheduleRepository:
             schedule = self.db.schedules.find_one({"_id": schedule_object_id})
             if not schedule:
                 raise ValueError(f"Agendamento com ID {schedule_id} não encontrado.")
+
             return Schedule(
                 id=str(schedule["_id"]),
                 user_id=str(schedule["user_id"]),

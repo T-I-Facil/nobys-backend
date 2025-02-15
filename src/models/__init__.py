@@ -1,8 +1,9 @@
 from .create_account import CreateUser
 from .hospital import CreateHospital
 from .schedule import CreateScheduleRequest, GetSchedulesResponse
-from .invoice import ScheduleIds, CreateInvoiceRequest
+from .invoice import ScheduleIds, CreateInvoiceRequest, GetInvoicesResponse
 from .login import LoginRequest
+from .analytics import GetAnalyticsRequest
 
 __all__ = [
     CreateUser,
@@ -11,5 +12,7 @@ __all__ = [
     GetSchedulesResponse,
     LoginRequest,
     ScheduleIds,
-    CreateInvoiceRequest
+    CreateInvoiceRequest,
+    GetInvoicesResponse,
+    GetAnalyticsRequest
 ]

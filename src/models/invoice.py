@@ -8,3 +8,8 @@ class CreateInvoiceRequest(BaseModel):
     total: float
     created_at: str
     schedule_ids: list
+
+class GetInvoicesResponse(BaseModel):
+    user_id: str
+    total: float
+    created_at: str

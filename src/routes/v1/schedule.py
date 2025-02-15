@@ -9,12 +9,13 @@ router = APIRouter(prefix="/v1", tags=["Schedules"])
 
 @router.get("/schedules", response_model=List[GetSchedulesResponse])
 async def get_schedules(
-    date: Optional[str] = Query(None, description="Data no formato YYYY-MM-DD"),
+    start_date: Optional[str] = Query(None, description="Data no formato YYYY-MM-DD"),
+    end_date: Optional[str] = Query(None, description="Data no formato YYYY-MM-DD"),
     user_id: str = Depends(AuthService.verify_token)
     ):
     try:
         user_repo = ScheduleRepository()
-        schedules = user_repo.get_schedules(user_id, date)
+        schedules = user_repo.get_schedules(user_id, start_date, end_date)
         if not schedules:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

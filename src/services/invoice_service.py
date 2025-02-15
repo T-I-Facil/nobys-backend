@@ -1,5 +1,5 @@
 from repositories import InvoiceRepository, ScheduleRepository
-from models import CreateInvoiceRequest, ScheduleIds
+from models import CreateInvoiceRequest, ScheduleIds, GetInvoicesResponse
 from datetime import datetime
 
 class InvoiceService:
@@ -22,3 +22,16 @@ class InvoiceService:
         )
         
         return self.invoice_repository.create(invoice.model_dump())
+    
+
+    def get_invoices(self, user_id: str):
+        data = self.invoice_repository.get_all(user_id)
+        invoices = [
+            GetInvoicesResponse(
+                id=str(invoice["_id"]),
+                user_id=str(invoice["user_id"]),
+                total=invoice["total"],
+                created_at=invoice["created_at"]
+            ) for invoice in data
+        ]
+        return invoices

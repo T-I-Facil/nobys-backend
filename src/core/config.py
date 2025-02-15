@@ -1,5 +1,5 @@
 from itsdangerous import URLSafeTimedSerializer
-from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
+from fastapi_mail import ConnectionConfig
 from fastapi.security import OAuth2PasswordBearer
 from os import getenv
 from dotenv import load_dotenv

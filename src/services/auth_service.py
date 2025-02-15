@@ -40,3 +40,9 @@ class AuthService:
             return user_id
         except JWTError:
             raise HTTPException(status_code=401, detail="Could not validate credentials")
+        
+    @staticmethod
+    def is_admin(user_id: str):
+        user_repo = UserRepository()
+        user = user_repo.get_by_id(user_id)
+        return user.get("is_admin", False)
